@@ -1,0 +1,54 @@
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-clip: border-box;
+    max-width: 245px;
+}
+
+.team .team-person img {
+    -webkit-transition: all .5s;
+    transition: all .5s;
+}
+
+.text-muted {
+    color: #8492a6 !important;
+}
+
+.text-muted {
+    --bs-text-opacity: 1;
+    color: #8492a6 !important;
+}
+
+.small,
+small {
+    font-size: .9em;
+}
+
+.experience {
+    font-size: .7em;
+}
+
+.fa-star {
+    color: #f1b561 !important;
+}
+
+.fa-location-dot {
+    margin-left: 2.5px;
+}
+
+.fa-indian-rupee-sign {
+    margin-left: 5px;
+}
+
+.fa-bookmark {
+    display: flex !important;
+    align-items: center;
+}
+
+.social-profiles {
+    display: flex;
+    justify-content: center;
+}
