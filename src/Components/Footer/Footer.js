@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
       <Typography variant="h6" align="center" gutterBottom>
-        Doctris
+        Arztin
       </Typography>
       <Typography variant="subtitle1" align="center" color="text.secondary" component="p">
         Your health, our priority.

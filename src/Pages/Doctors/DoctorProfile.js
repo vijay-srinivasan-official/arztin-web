@@ -1,11 +1,8 @@
 import React from 'react';
 import './DoctorProfile.css';
 import StarRating from '../Shared/StarRating.js';
+import AppointmentForm from '../Appointments/AppointmentForm.js';
 
-const bookAppointment = () => {
-  console.log('Booking appointment button pressed');
-  // Add your functionality here
-};
 
 const DoctorProfile = ({ doctor }) => {
   return (
@@ -37,7 +34,8 @@ const DoctorProfile = ({ doctor }) => {
             </li>
           </ul>
           <div class="bookAppointment d-flex mt-2">
-            <button type="button" class="btn btn-primary" onClick={bookAppointment}>Book Appointment</button>
+            {/* <button type="button" class="btn btn-primary" onClick={bookAppointment}>Book Appointment</button> */}
+            <AppointmentForm doctor={doctor}></AppointmentForm>
             <div class="d-flex p-1 mx-auto">
               <i class="fa-regular fa-bookmark"></i>
             </div>
