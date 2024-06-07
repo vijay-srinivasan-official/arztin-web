@@ -1,24 +1,18 @@
-// Dashboard.js
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import Table from 'react-bootstrap/Table';
-import ApproveModal from '../../Components/Modals/ApproveModal.js';
-import RejectModal from '../../Components/Modals/RejectModal.js';
 import Spinner from 'react-bootstrap/Spinner';
-import './Dashboard.css';
+import { useNavigate } from 'react-router-dom';
 
-const Dashboard = (props) => {
-    const [records, setRecords] = useState([]);
-    const [approvalSelectedRecord, setApprovalSelectedRecord] = useState(null);
-    const [rejectionSelectedRecord, setRejectionSelectedRecord] = useState(null);
+function Dashboard() {
+    const navigate = useNavigate();
+    const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const [showApprove, setShowApprove] = useState(false);
-    const [showReject, setShowReject] = useState(false);
-    const handleClose = () => {
-        setShowApprove(false);
-        setShowReject(false);
-    };
+    const handleViewAll = async (e) => {
+        navigate('/my-appointments');
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,7 +20,7 @@ const Dashboard = (props) => {
                 const requestBody = {
                     Id: sessionStorage.getItem("uid")
                 };
-                const response = await fetch('http://localhost:7071/api/GetPendingAppointments', {
+                const response = await fetch('http://localhost:7071/api/DashboardDetails', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -34,81 +28,50 @@ const Dashboard = (props) => {
                     body: JSON.stringify(requestBody),
                 });
                 const data = await response.json();
-                setRecords(data);
+                setAppointments(data);
                 setLoading(false);
             } catch (err) {
-
+                setError(err);
+                setLoading(false);
             }
         };
+
         fetchData();
     }, []);
 
-    const handleApprove = (record) => {
-
-        setShowApprove(true);
-        setApprovalSelectedRecord(record);
-        // Handle approve logic here
-        console.log(`Record with id ${record.appointmentId} approved`);
-    };
-
-    const handleReject = (record) => {
-        setShowReject(true);
-        setRejectionSelectedRecord(record);
-        // Handle reject logic here
-        console.log(`Record with id ${record.appointmentId} rejected`);
-    };
+    if (loading) {
+        return <div className='spinner-container'><Spinner animation="grow" /></div>;
+      }
 
     return (
-        <div className=''>
-            {!loading && (<div><h2>Pending appointments</h2>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {records.map((record, index) => (
-                            <tr key={record.id}>
-                                <td>{index + 1}</td>
-                                <td>{record.patientName}</td>
-                                <td>{new Date(record.appointmentTime).toLocaleDateString()}</td>
-                                <td>{new Date(record.appointmentTime).toLocaleTimeString()}</td>
-                                <td>
-                                    <div className='d-flex gap-2'>
-                                        <Button variant="outline-success" onClick={() => handleApprove(record)}>Approve</Button>
-                                        <Button variant="outline-danger" onClick={() => handleReject(record)}>Reject</Button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+        <div>
+            <h2>Dashboard</h2>
+            <div className='row gap-3'>
+                <Card style={{ width: '18rem' }}>
+                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                    <Card.Body>
+                        <Card.Title>Total Appointments</Card.Title>
+                        <Card.Text>
+                            <h3> {appointments.totalAppointments} </h3>
+                            {/* <p>Hooray! You successfully handled an incredible [Total Appointments] appointments as of today! This outstanding achievement reflects an unwavering dedication and commitment to providing excellent patient care and maintaining a consistent schedule. Keep up the fantastic work!</p> */}
+                        </Card.Text>
+                        <Button variant="primary">Explore</Button>
+                    </Card.Body>
+                </Card>
+                <Card style={{ width: '18rem' }}>
+                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                    <Card.Body>
+                        <Card.Title>Upcoming Appointments</Card.Title>
+                        <Card.Text>
+                        <h3> {appointments.upcomingAppointments} </h3>
 
-                        {approvalSelectedRecord && (
-                            <ApproveModal
-                                show={!!approvalSelectedRecord}
-                                props={approvalSelectedRecord}
-                                onHide={() => setApprovalSelectedRecord(null)}
-                            />
-                        )}
-
-                        {rejectionSelectedRecord && (
-                            <RejectModal
-                                show={!!rejectionSelectedRecord}
-                                props={rejectionSelectedRecord}
-                                onHide={() => setRejectionSelectedRecord(null)}
-                            />
-                        )}
-                    </tbody>
-                </Table></div>)}
-
-                { loading && (<div className='spinner-container'><Spinner animation="grow" /></div>)}
-
+                        </Card.Text>
+                        <Button variant="primary" onClick={handleViewAll}>View all</Button>
+                    </Card.Body>
+                </Card>
+            </div>
         </div>
     );
-};
+}
 
 export default Dashboard;

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import DoctorProfile from './DoctorProfile';
 import axios from 'axios';
+import Spinner from 'react-bootstrap/Spinner';
 import './DoctorList.css';
 
 const DoctorList = () => {
@@ -26,7 +27,7 @@ const DoctorList = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <div className='spinner-container'><Spinner animation="grow" /></div>;
   }
 
   if (error) {
@@ -34,8 +35,8 @@ const DoctorList = () => {
   }
 
   return (
-    <div class="container">
-      <div class="row align-items-center">
+    <div className="container">
+      <div className="row align-items-center">
         {doctors.map((doctor, index) => (
           <DoctorProfile doctor={doctor} />
         ))}

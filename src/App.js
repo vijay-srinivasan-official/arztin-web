@@ -8,8 +8,9 @@ import Footer from './Components/Footer/Footer';
 import './App.css';
 import Login from './Pages/Login/Login';
 import ProtectedRoute from './Auth/ProtectedRoute';
-import Dashboard from './Pages/Dashboard/Dashboard';
+import MyAppointments from './Pages/MyAppointments/MyAppointments.js';
 import { AuthProvider } from './Auth/AuthContext';
+import Dashboard from './Pages/Dashboard/Dashboard.js';
 
 const theme = createTheme({
   palette: {
@@ -52,6 +53,7 @@ const App = () => {
                 <Route path="/contact" element={<DoctorList />} />
                 <Route path="/login" element={<Login />} />
                 <Route element={<ProtectedRoute></ProtectedRoute>}>
+                  <Route element={<MyAppointments></MyAppointments>} exact path='/my-appointments'></Route>
                   <Route element={<Dashboard></Dashboard>} exact path='/dashboard'></Route>
                 </Route>
               </Routes>

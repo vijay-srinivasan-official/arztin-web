@@ -1,17 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 function ApproveModal(props) {
+    const [showPopup, setShowPopup] = useState(true);
 
     const formatTime = (dateString) => {
         const options = { hour: 'numeric', minute: 'numeric', hour12: true };
         return new Date(dateString).toLocaleTimeString([], options);
     };
 
+    const handleApproval = async () => {
+        try {
+            const requestBody = {
+                AppointmentId: props.props.appointmentId,
+                DoctorId: sessionStorage.getItem("uid")
+            };
+            const response = await fetch(' http://localhost:7071/api/ApproveAppointment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody),
+            });
+            const data = await response.json();
+            if (data.error || data.message) {
+                alert(data.error ?? data.message);
+                setShowPopup(false);
+                props.onHide();
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
+    };
+
     return (
         <Modal
-            show={props.show}
+            show={props.show || showPopup}
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -29,7 +54,7 @@ function ApproveModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
-                <Button variant="success" onClick={props.onApprove}>Approve</Button>
+                <Button variant="success" onClick={handleApproval}>Approve</Button>
             </Modal.Footer>
         </Modal>
     );

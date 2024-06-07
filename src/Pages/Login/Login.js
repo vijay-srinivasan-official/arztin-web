@@ -43,8 +43,8 @@ const Login = () => {
                     body: JSON.stringify(requestBody),
                 });
                 const data = await response.json();
-                if(data.message)
-                alert(data.message);
+                if(data.error)
+                alert(data.error);
                 else
                 {
                     sessionStorage.setItem("auth-token",data.access_token);

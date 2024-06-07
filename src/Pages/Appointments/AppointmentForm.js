@@ -205,9 +205,9 @@ const AppointmentForm = ({ doctor }) => {
                                 required
                                 onChange={(e) => setSelectedDate(e.target.value)}
                             />
-                            {noSlots && (<Alert key='danger' variant='danger'>
+                            {noSlots && (<div className='mt-2'><Alert key='danger' variant='danger'>
                                 No slots available on selected date. Please choose another one.
-                            </Alert>)}
+                            </Alert></div>)}
                         </Form.Group>
 
                         {selectedDate && !noSlots && (
