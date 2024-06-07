@@ -16,7 +16,7 @@ const StarRating = ({ rating }) => {
       <ul className="list-unstyled mb-0">
         {stars}
       </ul>
-      <p className="text-muted mb-0">{rating} Star</p>
+      {/* <p className="text-muted mb-0">{rating} Star</p> */}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import './AppointmentForm.css';
 import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 
 const AppointmentForm = ({ doctor }) => {
     const [validated, setValidated] = useState(false);
@@ -17,6 +18,7 @@ const AppointmentForm = ({ doctor }) => {
     });
     const [selectedDate, setSelectedDate] = useState('');
     const [timeSlots, setTimeSlots] = useState([]);
+    const [noSlots, setNoSlots] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState('');
     var [loading] = useState(false);
 
@@ -37,6 +39,11 @@ const AppointmentForm = ({ doctor }) => {
                         body: JSON.stringify(requestBody),
                     });
                     const data = await response.json();
+                    if (data.length === 0) {
+                        setNoSlots(true);
+                    } else {
+                        setNoSlots(false);
+                    }
                     const formattedTimeSlots = data.map((slot) => formatTimeSlot(slot));
                     setTimeSlots(formattedTimeSlots);
                 } catch (error) {
@@ -104,7 +111,8 @@ const AppointmentForm = ({ doctor }) => {
                     body: JSON.stringify(requestBody),
                 });
                 const data = await response.json();
-                alert(data.message);
+                if (data.message)
+                    alert(data.message);
                 // Reset form after successful submission
                 setValidated(false);
                 setShowForm(false);
@@ -197,9 +205,12 @@ const AppointmentForm = ({ doctor }) => {
                                 required
                                 onChange={(e) => setSelectedDate(e.target.value)}
                             />
+                            {noSlots && (<Alert key='danger' variant='danger'>
+                                No slots available on selected date. Please choose another one.
+                            </Alert>)}
                         </Form.Group>
 
-                        {selectedDate && (
+                        {selectedDate && !noSlots && (
                             <Form.Group className="mb-3">
                                 <Form.Label>Select time slot</Form.Label>
                                 <Form.Select

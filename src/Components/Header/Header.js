@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Auth/AuthContext';
 
 const Header = () => {
-  // const history = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
+  // const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const handleLogout = () => {
-    logout();
-    // history.push('/login');
+    sessionStorage.clear();
+    // setIsAuthenticated(false);
+    // navigate('/login');
   };
 
   const login = () => {
@@ -29,7 +30,10 @@ const Header = () => {
           <li><a href="/services">Services</a></li>
           <li><a href="/contact">Contact</a></li>
           {isAuthenticated ? (
-            <li><Button variant="outline-primary" onClick={handleLogout}>Logout</Button></li>
+            <div className='d-flex gap-2 justify-content-center align-items-center'>
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><Button variant="outline-primary" onClick={handleLogout}>Logout</Button></li>
+            </div>
           ) : (
             <div className='d-flex gap-2'>
               <li><a href="/login">

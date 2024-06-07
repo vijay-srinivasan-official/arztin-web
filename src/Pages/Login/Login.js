@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import  { Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
@@ -50,7 +51,7 @@ const Login = () => {
                     sessionStorage.setItem("expires_at",data.expires_at);
                     sessionStorage.setItem("refresh-token",data.refresh_token);
                     sessionStorage.setItem("uid",data.user.id);
-                    <Navigate to='/dashboard'  />
+                    navigate('/dashboard');
                 }
                 // Reset form after successful submission
                 setValidated(false);
