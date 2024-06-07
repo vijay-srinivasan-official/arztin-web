@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import './AppointmentForm.css';
+import Spinner from 'react-bootstrap/Spinner';
 
 const AppointmentForm = ({ doctor }) => {
     const [validated, setValidated] = useState(false);
@@ -13,8 +15,59 @@ const AppointmentForm = ({ doctor }) => {
         appointmentTime: '',
         agreedToTerms: false,
     });
+    const [selectedDate, setSelectedDate] = useState('');
+    const [timeSlots, setTimeSlots] = useState([]);
+    const [selectedSlot, setSelectedSlot] = useState('');
+    var [loading] = useState(false);
 
-    const handleClose = () => setShowForm(false);
+    useEffect(() => {
+        if (selectedDate) {
+            // Replace with your actual API endpoint
+            const fetchTimeSlots = async () => {
+                try {
+                    const requestBody = {
+                        DoctorId: doctor.id,
+                        Date: selectedDate
+                    };
+                    const response = await fetch('http://localhost:7071/api/GetAvailableTimeSlots', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestBody),
+                    });
+                    const data = await response.json();
+                    const formattedTimeSlots = data.map((slot) => formatTimeSlot(slot));
+                    setTimeSlots(formattedTimeSlots);
+                } catch (error) {
+                    console.error('Error fetching time slots:', error);
+                }
+            };
+
+            fetchTimeSlots();
+        }
+    }, [selectedDate]);
+
+    const formatTimeSlot = (slot) => {
+        const date = new Date(slot);
+        const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+        return new Intl.DateTimeFormat('en-US', options).format(date);
+    };
+
+    const handleClose = () => {
+        setValidated(false);
+        setShowForm(false);
+        setFormData({
+            name: '',
+            email: '',
+            phoneNumber: '',
+            appointmentTime: '',
+            agreedToTerms: false,
+        });
+        setSelectedDate('');
+        setSelectedSlot('');
+        setTimeSlots([]);
+};
 
     const bookAppointment = () => {
         setShowForm(true);
@@ -30,7 +83,8 @@ const AppointmentForm = ({ doctor }) => {
         }
         setValidated(true);
 
-        if (validated === true) {
+        if (formData.name != '' && formData.email != '' && formData.email.includes('@') && formData.email.includes('.') && formData.phoneNumber != '' && selectedDate != '' && selectedSlot != '') {
+            loading = true;
             e.preventDefault();
             // Call your API to submit form data
             try {
@@ -39,9 +93,10 @@ const AppointmentForm = ({ doctor }) => {
                     PatientName: formData.name,
                     PatientEmail: formData.email,
                     PatientPhone: formData.phoneNumber,
-                    AppointmentTime: formData.appointmentTime
+                    AppointmentDate: selectedDate,
+                    AppointmentTime: selectedSlot
                 };
-                const response = await fetch('your-api-endpoint', {
+                const response = await fetch(' http://localhost:7071/api/BookAppointment', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -49,8 +104,10 @@ const AppointmentForm = ({ doctor }) => {
                     body: JSON.stringify(requestBody),
                 });
                 const data = await response.json();
-                console.log('Form submitted:', data);
+                alert(data.message);
                 // Reset form after successful submission
+                setValidated(false);
+                setShowForm(false);
                 setFormData({
                     name: '',
                     email: '',
@@ -58,6 +115,9 @@ const AppointmentForm = ({ doctor }) => {
                     appointmentTime: '',
                     agreedToTerms: false,
                 });
+                setSelectedDate('');
+                setSelectedSlot('');
+                setTimeSlots([]);
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
@@ -70,6 +130,10 @@ const AppointmentForm = ({ doctor }) => {
             ...formData,
             [name]: value,
         });
+    };
+
+    const handleSlotChange = (e) => {
+        setSelectedSlot(e.target.value);
     };
 
     return (
@@ -92,7 +156,7 @@ const AppointmentForm = ({ doctor }) => {
                             <Form.Label>Name</Form.Label>
                             <Form.Control
                                 type="text"
-                                placeholder="Enter name"
+                                placeholder="Enter patient name"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
@@ -104,7 +168,7 @@ const AppointmentForm = ({ doctor }) => {
                             <Form.Label>Email address</Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Enter email"
+                                placeholder="Enter patient email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
@@ -116,13 +180,44 @@ const AppointmentForm = ({ doctor }) => {
                             <Form.Label>Phone Number</Form.Label>
                             <Form.Control
                                 type="tel"
-                                placeholder="Enter phone number"
+                                placeholder="Enter patient phone number"
                                 name="phoneNumber"
                                 value={formData.phoneNumber}
                                 onChange={handleChange}
                                 required
                             />
                         </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="formBasicCalendar">
+                            <Form.Label>Choose a time slot</Form.Label>
+                            <br></br>
+                            <input
+                                type="date"
+                                value={selectedDate}
+                                required
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                            />
+                        </Form.Group>
+
+                        {selectedDate && (
+                            <Form.Group className="mb-3">
+                                <Form.Label>Select time slot</Form.Label>
+                                <Form.Select
+                                    aria-label="Select time slot"
+                                    className="form-select"
+                                    value={selectedSlot}
+                                    required
+                                    onChange={handleSlotChange}
+                                >
+                                    <option value="">select an available slot</option>
+                                    {timeSlots.map((slot, index) => (
+                                        <option key={index} value={slot}>
+                                            {slot}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                            </Form.Group>
+                        )}
 
                         <Form.Group className="mb-3" controlId="formBasicCheckbox">
                             <Form.Check
@@ -134,13 +229,6 @@ const AppointmentForm = ({ doctor }) => {
                                 required
                             />
                         </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Disabled select menu</Form.Label>
-                            <Form.Select>
-                                <option>Disabled select</option>
-                            </Form.Select>
-                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -148,7 +236,8 @@ const AppointmentForm = ({ doctor }) => {
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleSubmit}>
-                        Book Now
+                        {!loading && (`Book Now`)}
+                        {loading && (<Spinner animation="grow" />)}
                     </Button>
                 </Modal.Footer>
             </Modal>
