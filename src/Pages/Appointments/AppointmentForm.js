@@ -67,7 +67,7 @@ const AppointmentForm = ({ doctor }) => {
         setSelectedDate('');
         setSelectedSlot('');
         setTimeSlots([]);
-};
+    };
 
     const bookAppointment = () => {
         setShowForm(true);
