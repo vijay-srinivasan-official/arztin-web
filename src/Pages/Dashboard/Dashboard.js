@@ -41,7 +41,7 @@ function Dashboard() {
 
     if (loading) {
         return <div className='spinner-container'><Spinner animation="grow" /></div>;
-      }
+    }
 
     return (
         <div>
@@ -63,7 +63,7 @@ function Dashboard() {
                     <Card.Body>
                         <Card.Title>Upcoming Appointments</Card.Title>
                         <Card.Text>
-                        <h3> {appointments.upcomingAppointments} </h3>
+                            <h3> {appointments.upcomingAppointments} </h3>
 
                         </Card.Text>
                         <Button variant="primary" onClick={handleViewAll}>View all</Button>

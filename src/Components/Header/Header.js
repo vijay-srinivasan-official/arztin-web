@@ -2,15 +2,17 @@ import './Header.css';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Auth/AuthContext';
+import Login from '../../Pages/Login/Login';
 
 const Header = () => {
   // const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, authLogout } = useAuth();
 
   const handleLogout = () => {
     sessionStorage.clear();
     // setIsAuthenticated(false);
-    // navigate('/login');
+    authLogout();
+    window.location.reload();
   };
 
   const login = () => {

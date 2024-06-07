@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../Auth/AuthContext';
 
 const Login = () => {
+    const { isAuthenticated, authLogin } = useAuth();
     const navigate = useNavigate();
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState({
@@ -43,14 +45,14 @@ const Login = () => {
                     body: JSON.stringify(requestBody),
                 });
                 const data = await response.json();
-                if(data.error)
-                alert(data.error);
-                else
-                {
-                    sessionStorage.setItem("auth-token",data.access_token);
-                    sessionStorage.setItem("expires_at",data.expires_at);
-                    sessionStorage.setItem("refresh-token",data.refresh_token);
-                    sessionStorage.setItem("uid",data.user.id);
+                if (data.error)
+                    alert(data.error);
+                else {
+                    sessionStorage.setItem("auth-token", data.access_token);
+                    sessionStorage.setItem("expires_at", data.expires_at);
+                    sessionStorage.setItem("refresh-token", data.refresh_token);
+                    sessionStorage.setItem("uid", data.user.id);
+                    authLogin();
                     navigate('/dashboard');
                 }
                 // Reset form after successful submission

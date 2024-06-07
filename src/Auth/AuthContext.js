@@ -4,18 +4,18 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(!!sessionStorage.getItem('auth-token'));
-    const login = () => {
+    const authLogin = () => {
         // sessionStorage.setItem('auth-token', 'your-auth-token');
         setIsAuthenticated(true);
     };
 
-    const logout = () => {
+    const authLogout = () => {
         sessionStorage.clear();
         setIsAuthenticated(false);
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, authLogin, authLogout }}>
             {children}
         </AuthContext.Provider>
     );
