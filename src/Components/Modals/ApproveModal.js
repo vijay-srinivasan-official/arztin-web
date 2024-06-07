@@ -16,7 +16,7 @@ function ApproveModal(props) {
                 AppointmentId: props.props.appointmentId,
                 DoctorId: sessionStorage.getItem("uid")
             };
-            const response = await fetch(' http://localhost:7071/api/ApproveAppointment', {
+            const response = await fetch(' https://arztin-fa.azurewebsites.net/api/ApproveAppointment?code=9KCl0n7yVGpCup9396UnPw0l8k_WkEk3cunbK1Xrj5S4AzFuEh1LHQ%3D%3D', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
