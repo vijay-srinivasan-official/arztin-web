@@ -51,8 +51,8 @@ const App = () => {
                 <Route path='/dashboard' element={<Dashboard />} />
               </Route> */}
                 <Route exact path="/" element={<DoctorList />} />
-                <Route path="/about" element={<DoctorList />} />
-                <Route path="/contact" element={<DoctorList />} />
+                {/* <Route path="/about" element={<DoctorList />} />
+                <Route path="/contact" element={<DoctorList />} /> */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<ProtectedRoute></ProtectedRoute>}>
