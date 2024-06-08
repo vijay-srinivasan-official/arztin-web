@@ -8,10 +8,11 @@ import Footer from './Components/Footer/Footer';
 import './App.css';
 import Login from './Pages/Login/Login';
 import ProtectedRoute from './Auth/ProtectedRoute';
-import MyAppointments from './Pages/MyAppointments/MyAppointments.js';
+import PendingAppointments from './Pages/MyAppointments/PendingAppointments.js';
 import { AuthProvider } from './Auth/AuthContext';
 import Dashboard from './Pages/Dashboard/Dashboard.js';
 import Register from './Pages/Register/Register.js';
+import UpcomingAppointments from './Pages/MyAppointments/UpcomingAppointments.js';
 
 const theme = createTheme({
   palette: {
@@ -55,7 +56,8 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<ProtectedRoute></ProtectedRoute>}>
-                  <Route element={<MyAppointments></MyAppointments>} exact path='/my-appointments'></Route>
+                  <Route element={<PendingAppointments></PendingAppointments>} exact path='/pending-appointments'></Route>
+                  <Route element={<UpcomingAppointments></UpcomingAppointments>} exact path='/upcoming-appointments'></Route>
                   <Route element={<Dashboard></Dashboard>} exact path='/dashboard'></Route>
                 </Route>
               </Routes>

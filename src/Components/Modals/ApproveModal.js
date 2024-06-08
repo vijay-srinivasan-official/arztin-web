@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Spinner } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import './Modal.css';
 
 function ApproveModal(props) {
     const [showPopup, setShowPopup] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const formatTime = (dateString) => {
         const options = { hour: 'numeric', minute: 'numeric', hour12: true };
@@ -11,6 +14,7 @@ function ApproveModal(props) {
     };
 
     const handleApproval = async () => {
+        setLoading(true);
         const apiUrl = process.env.REACT_APP_API_URL;
         const apiKey = process.env.REACT_APP_API_KEY;
         try {
@@ -31,6 +35,7 @@ function ApproveModal(props) {
                 setShowPopup(false);
                 props.onHide();
             }
+            setLoading(false);
         } catch (error) {
             console.error('Error submitting form:', error);
         }
@@ -56,7 +61,9 @@ function ApproveModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
-                <Button variant="success" onClick={handleApproval}>Approve</Button>
+                <Button variant="success" onClick={handleApproval}>
+                    <div className='d-flex justify-content-center align-items-center gap-2'>{loading && (<Spinner animation="grow" />)} Approve</div>
+                </Button>
             </Modal.Footer>
         </Modal>
     );

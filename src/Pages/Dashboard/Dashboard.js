@@ -3,6 +3,10 @@ import Card from 'react-bootstrap/Card';
 import React, { useEffect, useState } from 'react';
 import Spinner from 'react-bootstrap/Spinner';
 import { useNavigate } from 'react-router-dom';
+import { Grid } from '@mui/material';
+import DashboardCard from './DashboardCard';
+import { FaCouch, FaUsers, FaStore, FaUserPlus, FaClock, FaCheckCircle } from 'react-icons/fa';
+import { BiCalendarCheck } from 'react-icons/bi';
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -11,7 +15,7 @@ function Dashboard() {
     const [error, setError] = useState(null);
 
     const handleViewAll = async (e) => {
-        navigate('/my-appointments');
+        navigate('/pending-appointments');
     }
 
     useEffect(() => {
@@ -49,28 +53,38 @@ function Dashboard() {
         <div>
             <h2>Dashboard</h2>
             <div className='row gap-3'>
-                <Card style={{ width: '18rem' }}>
-                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-                    <Card.Body>
-                        <Card.Title>Total Appointments</Card.Title>
-                        <Card.Text>
-                            <h3> {appointments.totalAppointments} </h3>
-                            {/* <p>Hooray! You successfully handled an incredible [Total Appointments] appointments as of today! This outstanding achievement reflects an unwavering dedication and commitment to providing excellent patient care and maintaining a consistent schedule. Keep up the fantastic work!</p> */}
-                        </Card.Text>
-                        <Button variant="primary">Explore</Button>
-                    </Card.Body>
-                </Card>
-                <Card style={{ width: '18rem' }}>
-                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
-                    <Card.Body>
-                        <Card.Title>Upcoming Appointments</Card.Title>
-                        <Card.Text>
-                            <h3> {appointments.upcomingAppointments} </h3>
-
-                        </Card.Text>
-                        <Button variant="primary" onClick={handleViewAll}>View all</Button>
-                    </Card.Body>
-                </Card>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <DashboardCard
+                            icon={<BiCalendarCheck />}
+                            label="Total Appointments"
+                            value={appointments.totalAppointments}
+                            growth="+55%"
+                            growthLabel="than last week"
+                            route="/all-appointments"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <DashboardCard
+                            icon={<FaClock />}
+                            label="Pending Appointments"
+                            value={appointments.pendingAppointments}
+                            growth="+3%"
+                            growthLabel="than last month"
+                            route="/pending-appointments"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <DashboardCard
+                            icon={<FaCheckCircle />}
+                            label="Upcoming Appointments"
+                            value={appointments.upcomingAppointments}
+                            growth={appointments.upcomingAppointments === 0 ? '+0%' : '+1%'}
+                            growthLabel="than yesterday"
+                            route="/upcoming-appointments"
+                        />
+                    </Grid>
+                </Grid>
             </div>
         </div>
     );

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import './Modal.css';
+import { Spinner } from 'react-bootstrap';
 
 function RejectModal(props) {
     const [formData, setFormData] = useState({
@@ -9,6 +11,7 @@ function RejectModal(props) {
     });
     const [showPopup, setShowPopup] = useState(true);
     const [validated, setValidated] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const formatTime = (dateString) => {
         const options = { hour: 'numeric', minute: 'numeric', hour12: true };
@@ -29,6 +32,7 @@ function RejectModal(props) {
         if (formData.comments != null && formData.comments !== '') {
             try {
                 setValidated(true);
+                setLoading(true);
                 const requestBody = {
                     AppointmentId: props.props.appointmentId,
                     DoctorId: sessionStorage.getItem("uid"),
@@ -53,6 +57,7 @@ function RejectModal(props) {
                         comments: ''
                     });
                 }
+                setLoading(false);
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
@@ -96,7 +101,9 @@ function RejectModal(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
-                <Button variant="danger" onClick={handleRejection}>Reject</Button>
+                <Button variant="danger" onClick={handleRejection}>
+                    <div className='d-flex justify-content-center align-items-center gap-2'>{loading && (<Spinner animation="grow" />)} Reject</div>
+                </Button>
             </Modal.Footer>
         </Modal>
     );

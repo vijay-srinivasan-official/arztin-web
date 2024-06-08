@@ -4,9 +4,9 @@ import Table from 'react-bootstrap/Table';
 import ApproveModal from '../../Components/Modals/ApproveModal.js';
 import RejectModal from '../../Components/Modals/RejectModal.js';
 import Spinner from 'react-bootstrap/Spinner';
-import './MyAppointments.css';
+import './UpcomingAppointments.css';
 
-const MyAppointments = (props) => {
+const UpcomingAppointments = (props) => {
     const [records, setRecords] = useState([]);
     const [approvalSelectedRecord, setApprovalSelectedRecord] = useState(null);
     const [rejectionSelectedRecord, setRejectionSelectedRecord] = useState(null);
@@ -30,7 +30,7 @@ const MyAppointments = (props) => {
             const requestBody = {
                 Id: sessionStorage.getItem("uid")
             };
-            const response = await fetch(apiUrl + `/GetPendingAppointments` + apiKey, {
+            const response = await fetch(apiUrl + `/UpcomingAppointments` + apiKey, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const MyAppointments = (props) => {
 
     return (
         <div className=''>
-            {!loading && (<div><h2>Pending appointments</h2>
+            {!loading && (<div><h2>Upcoming appointments</h2>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -80,12 +80,7 @@ const MyAppointments = (props) => {
                                 <td>{record.patientName}</td>
                                 <td>{new Date(record.appointmentTime).toLocaleDateString()}</td>
                                 <td>{new Date(record.appointmentTime).toLocaleTimeString()}</td>
-                                <td>
-                                    <div className='d-flex gap-2'>
-                                        <Button variant="outline-success" onClick={() => handleApprove(record)}>Approve</Button>
-                                        <Button variant="outline-danger" onClick={() => handleReject(record)}>Reject</Button>
-                                    </div>
-                                </td>
+                                <td>{record.appointmentStatus}</td>
                             </tr>
                         ))}
 
@@ -119,4 +114,4 @@ const MyAppointments = (props) => {
     );
 };
 
-export default MyAppointments;
+export default UpcomingAppointments;
