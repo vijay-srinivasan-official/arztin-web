@@ -9,7 +9,7 @@ const Header = () => {
   const { isAuthenticated, authLogout } = useAuth();
 
   const handleLogout = () => {
-    sessionStorage.clear();
+    localStorage.clear();
     // setIsAuthenticated(false);
     authLogout();
     window.location.reload();
@@ -27,17 +27,20 @@ const Header = () => {
       </div>
       <nav>
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/services">Services</a></li>
-          <li><a href="/contact">Contact</a></li>
           {isAuthenticated ? (
             <div className='d-flex gap-2 justify-content-center align-items-center'>
               <li><a href="/dashboard">Dashboard</a></li>
-              <li><Button variant="outline-primary" onClick={handleLogout}>Logout</Button></li>
+              <li><div className='d-flex flex-direction-column'>({localStorage.getItem("userName")})</div></li>
+              <li>
+                <span className='logout' onClick={handleLogout}><i class="fa-duotone fa-right-from-bracket"></i></span>
+              </li>
             </div>
           ) : (
-            <div className='d-flex gap-2'>
+            <div className='d-flex gap-2 justify-content-center align-items-center'>
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/services">Services</a></li>
+              <li><a href="/contact">Contact</a></li>
               <li><a href="/login">
                 <Button variant="primary" onClick={login}>
                   Login

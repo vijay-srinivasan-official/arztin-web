@@ -24,7 +24,7 @@ function Dashboard() {
         const fetchData = async () => {
             try {
                 const requestBody = {
-                    Id: sessionStorage.getItem("uid")
+                    Id: localStorage.getItem("uid")
                 };
                 const response = await fetch(apiUrl + `/DashboardDetails` + apiKey, {
                     method: 'POST',

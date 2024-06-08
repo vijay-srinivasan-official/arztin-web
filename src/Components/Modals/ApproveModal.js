@@ -20,7 +20,7 @@ function ApproveModal(props) {
         try {
             const requestBody = {
                 AppointmentId: props.props.appointmentId,
-                DoctorId: sessionStorage.getItem("uid")
+                DoctorId: localStorage.getItem("uid")
             };
             const response = await fetch(apiUrl + `/ApproveAppointment` + apiKey, {
                 method: 'POST',

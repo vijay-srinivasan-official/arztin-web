@@ -13,6 +13,7 @@ import { AuthProvider } from './Auth/AuthContext';
 import Dashboard from './Pages/Dashboard/Dashboard.js';
 import Register from './Pages/Register/Register.js';
 import UpcomingAppointments from './Pages/MyAppointments/UpcomingAppointments.js';
+import AllAppointments from './Pages/MyAppointments/AllAppointments.js';
 
 const theme = createTheme({
   palette: {
@@ -56,6 +57,7 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route element={<ProtectedRoute></ProtectedRoute>}>
+                  <Route element={<AllAppointments></AllAppointments>} exact path='/all-appointments'></Route>
                   <Route element={<PendingAppointments></PendingAppointments>} exact path='/pending-appointments'></Route>
                   <Route element={<UpcomingAppointments></UpcomingAppointments>} exact path='/upcoming-appointments'></Route>
                   <Route element={<Dashboard></Dashboard>} exact path='/dashboard'></Route>

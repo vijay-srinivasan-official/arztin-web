@@ -50,10 +50,10 @@ const Register = () => {
                 if (data.error)
                     alert(data.error);
                 else {
-                    sessionStorage.setItem("auth-token", data.access_token);
-                    sessionStorage.setItem("expires_at", data.expires_at);
-                    sessionStorage.setItem("refresh-token", data.refresh_token);
-                    sessionStorage.setItem("uid", data.user.id);
+                    localStorage.setItem("auth-token", data.access_token);
+                    localStorage.setItem("expires_at", data.expires_at);
+                    localStorage.setItem("refresh-token", data.refresh_token);
+                    localStorage.setItem("uid", data.user.id);
                     authRegister();
                     navigate('/dashboard');
                 }

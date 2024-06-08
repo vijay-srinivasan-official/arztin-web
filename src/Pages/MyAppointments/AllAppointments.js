@@ -4,9 +4,9 @@ import Table from 'react-bootstrap/Table';
 import ApproveModal from '../../Components/Modals/ApproveModal.js';
 import RejectModal from '../../Components/Modals/RejectModal.js';
 import Spinner from 'react-bootstrap/Spinner';
-import './UpcomingAppointments.css';
+import './AllAppointments.css';
 
-const UpcomingAppointments = (props) => {
+const AllAppointments = (props) => {
     const [records, setRecords] = useState([]);
     const [approvalSelectedRecord, setApprovalSelectedRecord] = useState(null);
     const [rejectionSelectedRecord, setRejectionSelectedRecord] = useState(null);
@@ -16,6 +16,11 @@ const UpcomingAppointments = (props) => {
         fetchData();
     }, []);
 
+    const formatTime = (dateString) => {
+        const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+        return new Date(dateString).toLocaleTimeString([], options);
+    };
+
     const fetchData = async () => {
         const apiUrl = process.env.REACT_APP_API_URL;
         const apiKey = process.env.REACT_APP_API_KEY;
@@ -23,7 +28,7 @@ const UpcomingAppointments = (props) => {
             const requestBody = {
                 Id: localStorage.getItem("uid")
             };
-            const response = await fetch(apiUrl + `/UpcomingAppointments` + apiKey, {
+            const response = await fetch(apiUrl + `/GetAllAppointments` + apiKey, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,14 +43,9 @@ const UpcomingAppointments = (props) => {
         }
     };
 
-    const formatTime = (dateString) => {
-        const options = { hour: 'numeric', minute: 'numeric', hour12: true };
-        return new Date(dateString).toLocaleTimeString([], options);
-    };
-
     return (
         <div className=''>
-            <h2>Upcoming appointments</h2>
+            <h2>All appointments</h2>
             {!loading && records.length > 0 && (<div>
                 <Table striped bordered hover>
                     <thead>
@@ -99,4 +99,4 @@ const UpcomingAppointments = (props) => {
     );
 };
 
-export default UpcomingAppointments;
+export default AllAppointments;

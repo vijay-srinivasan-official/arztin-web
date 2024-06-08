@@ -61,3 +61,11 @@ nav ul li a:hover {
     color: #5d6ef1;
     text-decoration: none;
 }
+
+.logout {
+    cursor: pointer;
+}
+
+.logged-in-as {
+    font-size: x-small;
+}

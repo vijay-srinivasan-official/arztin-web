@@ -35,7 +35,7 @@ function RejectModal(props) {
                 setLoading(true);
                 const requestBody = {
                     AppointmentId: props.props.appointmentId,
-                    DoctorId: sessionStorage.getItem("uid"),
+                    DoctorId: localStorage.getItem("uid"),
                     RejectedReason: formData.comments
                 };
                 const response = await fetch(apiUrl + `/RejectAppointment` + apiKey, {

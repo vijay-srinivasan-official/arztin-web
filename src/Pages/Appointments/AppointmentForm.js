@@ -20,7 +20,7 @@ const AppointmentForm = ({ doctor }) => {
     const [timeSlots, setTimeSlots] = useState([]);
     const [noSlots, setNoSlots] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState('');
-    var [loading] = useState(false);
+    var [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const apiUrl = process.env.REACT_APP_API_URL;
@@ -94,7 +94,7 @@ const AppointmentForm = ({ doctor }) => {
         setValidated(true);
 
         if (formData.name != '' && formData.email != '' && formData.email.includes('@') && formData.email.includes('.') && formData.phoneNumber != '' && selectedDate != '' && selectedSlot != '') {
-            loading = true;
+            setLoading(true);
             e.preventDefault();
             // Call your API to submit form data
             try {
@@ -114,8 +114,9 @@ const AppointmentForm = ({ doctor }) => {
                     body: JSON.stringify(requestBody),
                 });
                 const data = await response.json();
-                if (data.error)
-                    alert(data.error);
+                setLoading(false);
+                if (data.message)
+                    alert(data.message);
                 // Reset form after successful submission
                 setValidated(false);
                 setShowForm(false);
@@ -250,8 +251,7 @@ const AppointmentForm = ({ doctor }) => {
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleSubmit}>
-                        {!loading && (`Book Now`)}
-                        {loading && (<Spinner animation="grow" />)}
+                        <div className='d-flex justify-content-center align-items-center gap-2'>{loading && (<Spinner animation="grow" />)} Book now</div>
                     </Button>
                 </Modal.Footer>
             </Modal>

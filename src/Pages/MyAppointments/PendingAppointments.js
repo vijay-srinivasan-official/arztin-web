@@ -23,12 +23,17 @@ const PendingAppointments = (props) => {
         fetchData();
     }, []);
 
+    const formatTime = (dateString) => {
+        const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+        return new Date(dateString).toLocaleTimeString([], options);
+    };
+
     const fetchData = async () => {
         const apiUrl = process.env.REACT_APP_API_URL;
         const apiKey = process.env.REACT_APP_API_KEY;
         try {
             const requestBody = {
-                Id: sessionStorage.getItem("uid")
+                Id: localStorage.getItem("uid")
             };
             const response = await fetch(apiUrl + `/GetPendingAppointments` + apiKey, {
                 method: 'POST',
@@ -62,11 +67,12 @@ const PendingAppointments = (props) => {
 
     return (
         <div className=''>
-            {!loading && (<div><h2>Pending appointments</h2>
+            <h2>Pending appointments</h2>
+            {!loading && records.length > 0 && (<div>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>S.No</th>
                             <th>Name</th>
                             <th>Date</th>
                             <th>Time</th>
@@ -79,7 +85,7 @@ const PendingAppointments = (props) => {
                                 <td>{index + 1}</td>
                                 <td>{record.patientName}</td>
                                 <td>{new Date(record.appointmentTime).toLocaleDateString()}</td>
-                                <td>{new Date(record.appointmentTime).toLocaleTimeString()}</td>
+                                <td>{formatTime(record.appointmentTime)}</td>
                                 <td>
                                     <div className='d-flex gap-2'>
                                         <Button variant="outline-success" onClick={() => handleApprove(record)}>Approve</Button>
@@ -112,6 +118,7 @@ const PendingAppointments = (props) => {
                         )}
                     </tbody>
                 </Table></div>)}
+            {records.length === 0 && (<div>No records found</div>)}
 
             {loading && (<div className='spinner-container'><Spinner animation="grow" /></div>)}
 
