@@ -23,15 +23,16 @@ const AppointmentForm = ({ doctor }) => {
     var [loading] = useState(false);
 
     useEffect(() => {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const apiKey = process.env.REACT_APP_API_KEY;
         if (selectedDate) {
-            // Replace with your actual API endpoint
             const fetchTimeSlots = async () => {
                 try {
                     const requestBody = {
                         DoctorId: doctor.id,
                         Date: selectedDate
                     };
-                    const response = await fetch('https://arztin-fa.azurewebsites.net/api/GetAvailableTimeSlots', {
+                    const response = await fetch(apiUrl + `/GetAvailableTimeSlots` + apiKey, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -81,6 +82,8 @@ const AppointmentForm = ({ doctor }) => {
     };
 
     const handleSubmit = async (e) => {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const apiKey = process.env.REACT_APP_API_KEY;
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.preventDefault();
@@ -103,7 +106,7 @@ const AppointmentForm = ({ doctor }) => {
                     AppointmentDate: selectedDate,
                     AppointmentTime: selectedSlot
                 };
-                const response = await fetch(' https://arztin-fa.azurewebsites.net/api/BookAppointment?code=9KCl0n7yVGpCup9396UnPw0l8k_WkEk3cunbK1Xrj5S4AzFuEh1LHQ%3D%3D', {
+                const response = await fetch(apiUrl + `/BookAppointment` + apiKey, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -111,8 +114,8 @@ const AppointmentForm = ({ doctor }) => {
                     body: JSON.stringify(requestBody),
                 });
                 const data = await response.json();
-                if (data.message)
-                    alert(data.message);
+                if (data.error)
+                    alert(data.error);
                 // Reset form after successful submission
                 setValidated(false);
                 setShowForm(false);

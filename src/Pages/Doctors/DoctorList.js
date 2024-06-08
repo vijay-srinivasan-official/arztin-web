@@ -10,14 +10,12 @@ const DoctorList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-  const apiKey = process.env.REACT_APP_API_KEY;
-
   useEffect(() => {
-    // Fetch data from API
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const apiKey = process.env.REACT_APP_API_KEY;
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://arztin-fa.azurewebsites.net/api/GetAllDoctors?code=9KCl0n7yVGpCup9396UnPw0l8k_WkEk3cunbK1Xrj5S4AzFuEh1LHQ%3D%3D');
+        const response = await axios.get(apiUrl + `/GetAllDoctors` + apiKey);
         setDoctors(response.data);
         setLoading(false);
       } catch (err) {

@@ -11,12 +11,14 @@ function ApproveModal(props) {
     };
 
     const handleApproval = async () => {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const apiKey = process.env.REACT_APP_API_KEY;
         try {
             const requestBody = {
                 AppointmentId: props.props.appointmentId,
                 DoctorId: sessionStorage.getItem("uid")
             };
-            const response = await fetch(' https://arztin-fa.azurewebsites.net/api/ApproveAppointment?code=9KCl0n7yVGpCup9396UnPw0l8k_WkEk3cunbK1Xrj5S4AzFuEh1LHQ%3D%3D', {
+            const response = await fetch(apiUrl + `/ApproveAppointment` + apiKey, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

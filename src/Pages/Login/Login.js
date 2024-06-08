@@ -21,6 +21,8 @@ const Login = () => {
     };
 
     const handleLogin = async (e) => {
+        const apiUrl = process.env.REACT_APP_API_URL;
+    const apiKey = process.env.REACT_APP_API_KEY;
         const form = e.currentTarget;
         if (form.checkValidity() === false) {
             e.preventDefault();
@@ -37,7 +39,7 @@ const Login = () => {
                     Email: formData.email,
                     Password: formData.password
                 };
-                const response = await fetch(' https://arztin-fa.azurewebsites.net/api/SignIn?code=9KCl0n7yVGpCup9396UnPw0l8k_WkEk3cunbK1Xrj5S4AzFuEh1LHQ%3D%3D', {
+                const response = await fetch(apiUrl + `/SignIn` + apiKey, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
