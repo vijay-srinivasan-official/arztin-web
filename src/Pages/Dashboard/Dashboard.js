@@ -59,7 +59,7 @@ function Dashboard() {
                             icon={<BiCalendarCheck />}
                             label="Total Appointments"
                             value={appointments.totalAppointments}
-                            growth="+55%"
+                            growth={appointments.totalAppointments === 0 ? '+0%' : '+100%'}
                             growthLabel="than last week"
                             route="/all-appointments"
                         />
@@ -69,7 +69,7 @@ function Dashboard() {
                             icon={<FaClock />}
                             label="Pending Appointments"
                             value={appointments.pendingAppointments}
-                            growth="+3%"
+                            growth={appointments.pendingAppointments === 0 ? '+0%' : '+55%'}
                             growthLabel="than last month"
                             route="/pending-appointments"
                         />
