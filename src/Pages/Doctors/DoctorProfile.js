@@ -7,7 +7,7 @@ import AppointmentForm from '../Appointments/AppointmentForm.js';
 const DoctorProfile = ({ doctor }) => {
   return (
     <div className="col-xl-3 col-lg-3 col-md-6">
-      <div className="card team border-0 rounded shadow overflow-hidden">
+      <div className="card team border border-light shadow-sm rounded overflow-hidden">
         <div className="team-person position-relative overflow-hidden">
           <img src={`${doctor.profilePhoto}`} className="img-fluid" alt=""></img>
           {/* <ul className="list-unstyled team-like">
